@@ -1,3 +1,7 @@
 <component name="CopyrightManager">
-  <settings default="" />
+  <settings default="No Copy">
+    <module2copyright>
+      <element module="All" copyright="No Copy" />
+    </module2copyright>
+  </settings>
 </component>
