@@ -100,10 +100,9 @@
             tools:ignore="HardcodedText" />
 
         <Button
-            android:text="\u2212"
+            android:text=""
             android:id="@+id/minus"
             tools:ignore="HardcodedText" />
-
 
         <Button
             android:text="\u002B"

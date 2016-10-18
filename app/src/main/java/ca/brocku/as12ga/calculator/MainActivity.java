@@ -27,8 +27,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
             R.id.mult,
             R.id.div,
             R.id.equal,
-            R.id.decim
+            R.id.decim,
+            R.id.AC,
+            R.id.Clr
     };
+
+    private String uniToStr(int unicode){
+        return new String(Character.toChars(unicode));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -75,6 +81,30 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.zero:
                 Toast.makeText(this, "0", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.plus:
+                Toast.makeText(this, uniToStr(0x002B), Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.minus:
+                Toast.makeText(this, uniToStr(0x2212), Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.mult:
+                Toast.makeText(this, uniToStr(0x00D7), Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.div:
+                Toast.makeText(this, uniToStr(0x00F7), Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.equal:
+                Toast.makeText(this, uniToStr(0x003D), Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.decim:
+                Toast.makeText(this, uniToStr(0x002E), Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.AC:
+                Toast.makeText(this, "ALL CLEAR", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.Clr:
+                Toast.makeText(this, "CLEAR", Toast.LENGTH_SHORT).show();
                 break;
         }
     }
