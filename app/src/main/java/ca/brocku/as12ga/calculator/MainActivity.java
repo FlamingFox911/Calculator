@@ -1,9 +1,11 @@
 package ca.brocku.as12ga.calculator;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -11,6 +13,9 @@ import java.util.List;
 
 public class MainActivity extends Activity implements View.OnClickListener {
     private List<Button> bList;
+    private int total = 0;
+    TextView output;
+
     private static final int[] bIDs = {
             R.id.one,
             R.id.two,
@@ -40,7 +45,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        output = (TextView)findViewById(R.id.output);
         bList = new ArrayList<>(bIDs.length);
         for (int id : bIDs) {
             final Button b = (Button)findViewById(id);
@@ -49,38 +54,49 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onClick(View v){
         switch (v.getId()){
             case R.id.one:
                 Toast.makeText(this, "1", Toast.LENGTH_SHORT).show();
+                total = 1;
                 break;
             case R.id.two:
                 Toast.makeText(this, "2", Toast.LENGTH_SHORT).show();
+                total = 2;
                 break;
             case R.id.three:
                 Toast.makeText(this, "3", Toast.LENGTH_SHORT).show();
+                total = 3;
                 break;
             case R.id.four:
                 Toast.makeText(this, "4", Toast.LENGTH_SHORT).show();
+                total = 4;
                 break;
             case R.id.five:
                 Toast.makeText(this, "5", Toast.LENGTH_SHORT).show();
+                total = 5;
                 break;
             case R.id.six:
                 Toast.makeText(this, "6", Toast.LENGTH_SHORT).show();
+                total = 6;
                 break;
             case R.id.seven:
                 Toast.makeText(this, "7", Toast.LENGTH_SHORT).show();
+                total = 7;
                 break;
             case R.id.eight:
                 Toast.makeText(this, "8", Toast.LENGTH_SHORT).show();
+                total = 8;
                 break;
             case R.id.nine :
                 Toast.makeText(this, "9", Toast.LENGTH_SHORT).show();
+                total = 9;
                 break;
             case R.id.zero:
                 Toast.makeText(this, "0", Toast.LENGTH_SHORT).show();
+                total = 0;
                 break;
             case R.id.plus:
                 Toast.makeText(this, uniToStr(0x002B), Toast.LENGTH_SHORT).show();
@@ -107,5 +123,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 Toast.makeText(this, "CLEAR", Toast.LENGTH_SHORT).show();
                 break;
         }
+        output.setText(Integer.toString(total));
     }
 }
