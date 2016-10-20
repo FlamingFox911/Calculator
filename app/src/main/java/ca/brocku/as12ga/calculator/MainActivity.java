@@ -1,6 +1,5 @@
 package ca.brocku.as12ga.calculator;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,12 +9,17 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+
 
 public class MainActivity extends Activity implements View.OnClickListener {
-    private List<Button> bList;
-    private int total = 0;
-    TextView output;
+    private static final String ZERO_STATE = "0";
 
+    private List<Button> bList;
+    private boolean hasDecim = false;
+    private String input = "0";
+    private TextView output;
     private static final int[] bIDs = {
             R.id.one,
             R.id.two,
@@ -54,49 +58,48 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
     }
 
-    @SuppressLint("SetTextI18n")
     @Override
     public void onClick(View v){
         switch (v.getId()){
             case R.id.one:
-                Toast.makeText(this, "1", Toast.LENGTH_SHORT).show();
-                total = 1;
+                if (Objects.equals(input, ZERO_STATE)) input = "";
+                input += "1";
                 break;
             case R.id.two:
-                Toast.makeText(this, "2", Toast.LENGTH_SHORT).show();
-                total = 2;
+                if (Objects.equals(input, ZERO_STATE)) input = "";
+                input += "2";
                 break;
             case R.id.three:
-                Toast.makeText(this, "3", Toast.LENGTH_SHORT).show();
-                total = 3;
+                if (Objects.equals(input, ZERO_STATE)) input = "";
+                input += "3";
                 break;
             case R.id.four:
-                Toast.makeText(this, "4", Toast.LENGTH_SHORT).show();
-                total = 4;
+                if (Objects.equals(input, ZERO_STATE)) input = "";
+                input += "4";
                 break;
             case R.id.five:
-                Toast.makeText(this, "5", Toast.LENGTH_SHORT).show();
-                total = 5;
+                if (Objects.equals(input, ZERO_STATE)) input = "";
+                input += "5";
                 break;
             case R.id.six:
-                Toast.makeText(this, "6", Toast.LENGTH_SHORT).show();
-                total = 6;
+                if (Objects.equals(input, ZERO_STATE)) input = "";
+                input += "6";
                 break;
             case R.id.seven:
-                Toast.makeText(this, "7", Toast.LENGTH_SHORT).show();
-                total = 7;
+                if (Objects.equals(input, ZERO_STATE)) input = "";
+                input += "7";
                 break;
             case R.id.eight:
-                Toast.makeText(this, "8", Toast.LENGTH_SHORT).show();
-                total = 8;
+                if (Objects.equals(input, ZERO_STATE)) input = "";
+                input += "8";
                 break;
             case R.id.nine :
-                Toast.makeText(this, "9", Toast.LENGTH_SHORT).show();
-                total = 9;
+                if (Objects.equals(input, ZERO_STATE)) input = "";
+                input += "9";
                 break;
             case R.id.zero:
-                Toast.makeText(this, "0", Toast.LENGTH_SHORT).show();
-                total = 0;
+                if (Objects.equals(input, ZERO_STATE)) input = "";
+                input += "0";
                 break;
             case R.id.plus:
                 Toast.makeText(this, uniToStr(0x002B), Toast.LENGTH_SHORT).show();
@@ -114,15 +117,22 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 Toast.makeText(this, uniToStr(0x003D), Toast.LENGTH_SHORT).show();
                 break;
             case R.id.decim:
-                Toast.makeText(this, uniToStr(0x002E), Toast.LENGTH_SHORT).show();
+                if (!hasDecim){
+                    input += ".";
+                    hasDecim = true;
+                }
                 break;
             case R.id.AC:
                 Toast.makeText(this, "ALL CLEAR", Toast.LENGTH_SHORT).show();
+                input = ZERO_STATE;
+                hasDecim = false;
                 break;
             case R.id.Clr:
                 Toast.makeText(this, "CLEAR", Toast.LENGTH_SHORT).show();
+                input = ZERO_STATE;
+                hasDecim = false;
                 break;
         }
-        output.setText(Integer.toString(total));
+        output.setText(input);
     }
 }
