@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -18,7 +19,19 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private List<Button> bList;
     private boolean hasDecim = false;
+    private boolean replace = true;
     private String input = "0";
+    private enum OPERATOR {
+        NONE,
+        PLUS,
+        MINUS,
+        MULTIPLY,
+        DIVIDE
+    }
+    private OPERATOR currentOp = OPERATOR.NONE;
+    private OPERATOR lastOp = OPERATOR.NONE;
+    private BigDecimal valX = new BigDecimal ("0");
+    private BigDecimal valY = new BigDecimal ("0");
     private TextView output;
     private static final int[] bIDs = {
             R.id.one,
@@ -45,6 +58,33 @@ public class MainActivity extends Activity implements View.OnClickListener {
         return new String(Character.toChars(unicode));
     }
 
+    private BigDecimal evaluate(){
+        valY = new BigDecimal(output.getText().toString());
+        switch(lastOp) {
+            case NONE:
+                break;
+            case PLUS:
+                valX = valX.add(valY);
+                break;
+            case MINUS:
+                valX = valX.subtract(valY);
+                break;
+            case MULTIPLY:
+                valX = valX.multiply(valY);
+                break;
+            case DIVIDE:
+                if (valY.compareTo(BigDecimal.ZERO) == 0){
+                    Toast.makeText(this, "ERROR: Divide by Zero. User intended to implode the universe.", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    valX = valX.divide(valY, 20, BigDecimal.ROUND_HALF_UP);
+                }
+                break;
+        }
+        valX = valX.stripTrailingZeros();
+        return valX;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -62,75 +102,111 @@ public class MainActivity extends Activity implements View.OnClickListener {
     public void onClick(View v){
         switch (v.getId()){
             case R.id.one:
-                if (Objects.equals(input, ZERO_STATE)) input = "";
+                if (replace) input = "";
                 input += "1";
+                replace = false;
                 break;
             case R.id.two:
-                if (Objects.equals(input, ZERO_STATE)) input = "";
+                if (replace) input = "";
                 input += "2";
+                replace = false;
                 break;
             case R.id.three:
-                if (Objects.equals(input, ZERO_STATE)) input = "";
+                if (replace) input = "";
                 input += "3";
+                replace = false;
                 break;
             case R.id.four:
-                if (Objects.equals(input, ZERO_STATE)) input = "";
+                if (replace) input = "";
                 input += "4";
+                replace = false;
                 break;
             case R.id.five:
-                if (Objects.equals(input, ZERO_STATE)) input = "";
+                if (replace) input = "";
                 input += "5";
+                replace = false;
                 break;
             case R.id.six:
-                if (Objects.equals(input, ZERO_STATE)) input = "";
+                if (replace) input = "";
                 input += "6";
+                replace = false;
                 break;
             case R.id.seven:
-                if (Objects.equals(input, ZERO_STATE)) input = "";
+                if (replace) input = "";
                 input += "7";
+                replace = false;
                 break;
             case R.id.eight:
-                if (Objects.equals(input, ZERO_STATE)) input = "";
+                if (replace) input = "";
                 input += "8";
+                replace = false;
                 break;
             case R.id.nine :
-                if (Objects.equals(input, ZERO_STATE)) input = "";
+                if (replace) input = "";
                 input += "9";
+                replace = false;
                 break;
             case R.id.zero:
-                if (Objects.equals(input, ZERO_STATE)) input = "";
+                if (replace) input = "";
+                else replace = false;
                 input += "0";
                 break;
             case R.id.plus:
-                Toast.makeText(this, uniToStr(0x002B), Toast.LENGTH_SHORT).show();
+                currentOp = OPERATOR.PLUS;
+                input = evaluate().toPlainString();
+                lastOp = currentOp;
+                hasDecim = false;
+                replace = true;
                 break;
             case R.id.minus:
-                Toast.makeText(this, uniToStr(0x2212), Toast.LENGTH_SHORT).show();
+                currentOp = OPERATOR.MINUS;
+                input = evaluate().toPlainString();
+                lastOp = currentOp;
+                hasDecim = false;
+                replace = true;
                 break;
             case R.id.mult:
-                Toast.makeText(this, uniToStr(0x00D7), Toast.LENGTH_SHORT).show();
+                currentOp = OPERATOR.MULTIPLY;
+                input = evaluate().toPlainString();
+                lastOp = currentOp;
+                hasDecim = false;
+                replace = true;
                 break;
             case R.id.div:
-                Toast.makeText(this, uniToStr(0x00F7), Toast.LENGTH_SHORT).show();
+                currentOp = OPERATOR.DIVIDE;
+                input = evaluate().toPlainString();
+                lastOp = currentOp;
+                hasDecim = false;
+                replace = true;
                 break;
             case R.id.equal:
-                Toast.makeText(this, uniToStr(0x003D), Toast.LENGTH_SHORT).show();
+                currentOp = OPERATOR.NONE;
+                input = evaluate().toPlainString();
+                lastOp = currentOp;
+                hasDecim = false;
+                replace = true;
                 break;
             case R.id.decim:
                 if (!hasDecim){
                     input += ".";
                     hasDecim = true;
+                    replace = false;
                 }
                 break;
             case R.id.AC:
                 Toast.makeText(this, "ALL CLEAR", Toast.LENGTH_SHORT).show();
                 input = ZERO_STATE;
+                currentOp = OPERATOR.NONE;
+                lastOp = OPERATOR.NONE;
+                valX = new BigDecimal("0");
                 hasDecim = false;
+                replace = true;
                 break;
             case R.id.Clr:
                 Toast.makeText(this, "CLEAR", Toast.LENGTH_SHORT).show();
                 input = ZERO_STATE;
                 hasDecim = false;
+                replace = true;
                 break;
         }
         output.setText(input);
