@@ -10,9 +10,6 @@ import android.widget.Toast;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-
-
 
 public class MainActivity extends Activity implements View.OnClickListener {
     private static final String ZERO_STATE = "0";
@@ -62,6 +59,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         valY = new BigDecimal(output.getText().toString());
         switch(lastOp) {
             case NONE:
+                valX = valY;
                 break;
             case PLUS:
                 valX = valX.add(valY);
