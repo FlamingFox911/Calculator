@@ -1,6 +1,7 @@
 package ca.brocku.as12ga.calculator;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,13 +12,15 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends Activity implements View.OnClickListener {
+public class MainActivity extends Activity implements View.OnClickListener, View.OnLongClickListener {
     private static final String ZERO_STATE = "0";
 
     private List<Button> bList;
     private boolean hasDecim = false;
     private boolean replace = true;
+    private boolean isSetOp = false;
     private String input = "0";
+
     private enum OPERATOR {
         NONE,
         PLUS,
@@ -51,8 +54,17 @@ public class MainActivity extends Activity implements View.OnClickListener {
             R.id.Clr
     };
 
-    private String uniToStr(int unicode){
-        return new String(Character.toChars(unicode));
+    // Kudos to vuhung3990 for clipboard snippet. For use in all APIs.
+    private void setClipboard(String text) {
+        if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.HONEYCOMB) {
+            android.text.ClipboardManager clipboard = (android.text.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            clipboard.setText(text);
+        } else {
+            android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            android.content.ClipData clip = android.content.ClipData.newPlainText("Copied Calculation", text);
+            clipboard.setPrimaryClip(clip);
+        }
+        Toast.makeText(this, "Copied to Clipboard", Toast.LENGTH_SHORT).show();
     }
 
     private BigDecimal evaluate(){
@@ -72,7 +84,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 break;
             case DIVIDE:
                 if (valY.compareTo(BigDecimal.ZERO) == 0){
-                    Toast.makeText(this, "ERROR: Divide by Zero. User intended to implode the universe.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "ERROR: Divide by Zero. User intended to implode the universe.", Toast.LENGTH_LONG).show();
+                    valX = new BigDecimal("0");
                 }
                 else {
                     valX = valX.divide(valY, 20, BigDecimal.ROUND_HALF_UP);
@@ -94,98 +107,162 @@ public class MainActivity extends Activity implements View.OnClickListener {
             b.setOnClickListener(this);
             bList.add(b);
         }
+        output.setOnLongClickListener(this);
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        if (v.getId() == R.id.output){
+            setClipboard(input);
+        }
+        return true;
     }
 
     @Override
     public void onClick(View v){
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.one:
                 if (replace) input = "";
+                if (isSetOp) {
+                    lastOp = currentOp;
+                    isSetOp = false;
+                }
                 input += "1";
                 replace = false;
                 break;
             case R.id.two:
                 if (replace) input = "";
+                if (isSetOp) {
+                    lastOp = currentOp;
+                    isSetOp = false;
+                }
                 input += "2";
                 replace = false;
                 break;
             case R.id.three:
                 if (replace) input = "";
+                if (isSetOp) {
+                    lastOp = currentOp;
+                    isSetOp = false;
+                }
                 input += "3";
                 replace = false;
                 break;
             case R.id.four:
                 if (replace) input = "";
+                if (isSetOp) {
+                    lastOp = currentOp;
+                    isSetOp = false;
+                }
                 input += "4";
                 replace = false;
                 break;
             case R.id.five:
                 if (replace) input = "";
+                if (isSetOp) {
+                    lastOp = currentOp;
+                    isSetOp = false;
+                }
                 input += "5";
                 replace = false;
                 break;
             case R.id.six:
                 if (replace) input = "";
+                if (isSetOp) {
+                    lastOp = currentOp;
+                    isSetOp = false;
+                }
                 input += "6";
                 replace = false;
                 break;
             case R.id.seven:
                 if (replace) input = "";
+                if (isSetOp) {
+                    lastOp = currentOp;
+                    isSetOp = false;
+                }
                 input += "7";
                 replace = false;
                 break;
             case R.id.eight:
                 if (replace) input = "";
+                if (isSetOp) {
+                    lastOp = currentOp;
+                    isSetOp = false;
+                }
                 input += "8";
                 replace = false;
                 break;
-            case R.id.nine :
+            case R.id.nine:
                 if (replace) input = "";
+                if (isSetOp) {
+                    lastOp = currentOp;
+                    isSetOp = false;
+                }
                 input += "9";
                 replace = false;
                 break;
             case R.id.zero:
                 if (replace) input = "";
                 else replace = false;
+                if (isSetOp) {
+                    lastOp = currentOp;
+                    isSetOp = false;
+                }
                 input += "0";
                 break;
             case R.id.plus:
                 currentOp = OPERATOR.PLUS;
-                input = evaluate().toPlainString();
-                lastOp = currentOp;
-                hasDecim = false;
-                replace = true;
+                if (!isSetOp){
+                    input = evaluate().toPlainString();
+                    isSetOp = true;
+                    hasDecim = false;
+                    replace = true;
+                }
                 break;
             case R.id.minus:
                 currentOp = OPERATOR.MINUS;
-                input = evaluate().toPlainString();
-                lastOp = currentOp;
-                hasDecim = false;
-                replace = true;
+                if (!isSetOp){
+                    input = evaluate().toPlainString();
+                    isSetOp = true;
+                    hasDecim = false;
+                    replace = true;
+                }
                 break;
             case R.id.mult:
                 currentOp = OPERATOR.MULTIPLY;
-                input = evaluate().toPlainString();
-                lastOp = currentOp;
-                hasDecim = false;
-                replace = true;
+                if (!isSetOp){
+                    input = evaluate().toPlainString();
+                    isSetOp = true;
+                    hasDecim = false;
+                    replace = true;
+                }
                 break;
             case R.id.div:
                 currentOp = OPERATOR.DIVIDE;
-                input = evaluate().toPlainString();
-                lastOp = currentOp;
-                hasDecim = false;
-                replace = true;
+                if (!isSetOp){
+                    input = evaluate().toPlainString();
+                    isSetOp = true;
+                    hasDecim = false;
+                    replace = true;
+                }
                 break;
             case R.id.equal:
                 currentOp = OPERATOR.NONE;
-                input = evaluate().toPlainString();
-                lastOp = currentOp;
-                hasDecim = false;
-                replace = true;
+                if (!isSetOp){
+                    input = evaluate().toPlainString();
+                    isSetOp = true;
+                    hasDecim = false;
+                    replace = true;
+                }
                 break;
             case R.id.decim:
                 if (!hasDecim){
+                    if (isSetOp) {
+                        input = "0";
+                        lastOp = currentOp;
+                        isSetOp = false;
+                    }
                     input += ".";
                     hasDecim = true;
                     replace = false;
@@ -199,6 +276,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 valX = new BigDecimal("0");
                 hasDecim = false;
                 replace = true;
+                isSetOp = false;
                 break;
             case R.id.Clr:
                 Toast.makeText(this, "CLEAR", Toast.LENGTH_SHORT).show();
