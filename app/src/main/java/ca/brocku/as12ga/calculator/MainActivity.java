@@ -14,13 +14,6 @@ import java.util.List;
 
 public class MainActivity extends Activity implements View.OnClickListener, View.OnLongClickListener {
     private static final String ZERO_STATE = "0";
-
-    private List<Button> bList;
-    private boolean hasDecim = false;
-    private boolean replace = true;
-    private boolean isSetOp = false;
-    private String input = "0";
-
     private enum OPERATOR {
         NONE,
         PLUS,
@@ -28,11 +21,6 @@ public class MainActivity extends Activity implements View.OnClickListener, View
         MULTIPLY,
         DIVIDE
     }
-    private OPERATOR currentOp = OPERATOR.NONE;
-    private OPERATOR lastOp = OPERATOR.NONE;
-    private BigDecimal valX = new BigDecimal ("0");
-    private BigDecimal valY = new BigDecimal ("0");
-    private TextView output;
     private static final int[] bIDs = {
             R.id.one,
             R.id.two,
@@ -51,8 +39,21 @@ public class MainActivity extends Activity implements View.OnClickListener, View
             R.id.equal,
             R.id.decim,
             R.id.AC,
-            R.id.Clr
+            R.id.Clr,
+            R.id.mem,
+            R.id.swap
     };
+    private List<Button> bList;
+    private boolean hasDecim = false;
+    private boolean replace = true;
+    private boolean isSetOp = false;
+    private String input = "0";
+    private OPERATOR currentOp = OPERATOR.NONE;
+    private OPERATOR lastOp = OPERATOR.NONE;
+    private BigDecimal valX = new BigDecimal ("0");
+    private BigDecimal valY = new BigDecimal ("0");
+    private BigDecimal mem = new BigDecimal ("0");
+    private TextView output;
 
     // Kudos to vuhung3990 for clipboard snippet. For use in all APIs.
     private void setClipboard(String text) {
@@ -97,6 +98,35 @@ public class MainActivity extends Activity implements View.OnClickListener, View
     }
 
     @Override
+    public void onSaveInstanceState(Bundle b) {
+        b.putBoolean("hasDecim", hasDecim);
+        b.putBoolean("replace", replace);
+        b.putBoolean("isSetOp", isSetOp);
+        b.putString("input", input);
+        b.putSerializable("currentOp", currentOp);
+        b.putSerializable("lastOp", lastOp);
+        b.putString("valX", valX.toPlainString());
+        b.putString("valY", valY.toPlainString());
+        b.putString("mem", mem.toPlainString());
+        super.onSaveInstanceState(b);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle b) {
+        super.onRestoreInstanceState(b);
+        hasDecim = b.getBoolean("hasDecim");
+        replace = b.getBoolean("replace");
+        isSetOp = b.getBoolean("isSetOp");
+        input = b.getString("input");
+        output.setText(b.getString("input"));
+        currentOp = (OPERATOR) b.getSerializable("currentOp");
+        lastOp = (OPERATOR) b.getSerializable("lastOp");
+        valX = new BigDecimal(b.getString("valX"));
+        valY = new BigDecimal(b.getString("valY"));
+        mem = new BigDecimal(b.getString("mem"));
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -105,6 +135,9 @@ public class MainActivity extends Activity implements View.OnClickListener, View
         for (int id : bIDs) {
             final Button b = (Button)findViewById(id);
             b.setOnClickListener(this);
+            if (id == R.id.mem){
+                b.setOnLongClickListener(this);
+            }
             bList.add(b);
         }
         output.setOnLongClickListener(this);
@@ -114,6 +147,10 @@ public class MainActivity extends Activity implements View.OnClickListener, View
     public boolean onLongClick(View v) {
         if (v.getId() == R.id.output){
             setClipboard(input);
+        }
+        else if (v.getId() == R.id.mem){
+            Toast.makeText(this, "Memory Recall", Toast.LENGTH_SHORT).show();
+            output.setText(mem.stripTrailingZeros().toPlainString());
         }
         return true;
     }
@@ -283,6 +320,15 @@ public class MainActivity extends Activity implements View.OnClickListener, View
                 input = ZERO_STATE;
                 hasDecim = false;
                 replace = true;
+                break;
+            case R.id.mem:
+                Toast.makeText(this, "Copied to Memory. Hold M to Recall.", Toast.LENGTH_SHORT).show();
+                mem = new BigDecimal(input);
+                break;
+            case R.id.swap:
+                if (input.compareTo("0") != 0) {
+                    input = input.startsWith("-") ? input.substring(1) : "-" + input;
+                }
                 break;
         }
         output.setText(input);

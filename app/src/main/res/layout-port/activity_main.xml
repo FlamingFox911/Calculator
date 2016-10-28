@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
@@ -32,107 +33,100 @@
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
         android:id="@+id/numpad"
+        android:alignmentMode="alignBounds"
         android:columnCount="4"
+        android:rowCount="6"
         android:layout_below="@+id/output" >
-        <Button
-            android:layout_columnSpan="3"
-            android:layout_gravity="fill"
-            android:text="All Clear"
-            android:id="@+id/AC"
-            tools:ignore="HardcodedText" />
 
         <Button
-            android:text="Clear"
-            android:id="@+id/Clr"
-            tools:ignore="HardcodedText" />
+            android:layout_columnSpan="2"
+            android:layout_gravity="fill_horizontal"
+            android:text="@string/AC"
+            android:id="@+id/AC" />
 
         <Button
-            android:layout_column="1"
-            android:text="\u00F7"
-            android:id="@+id/div"
-            tools:ignore="HardcodedText" />
+            android:text="@string/Clr"
+            android:id="@+id/Clr" />
 
         <Button
-            android:text="\u00D7"
-            android:id="@+id/mult"
-            tools:ignore="HardcodedText" />
+            android:text="@string/mem"
+            android:id="@+id/mem" />
 
         <Button
-            android:text="\u2212"
-            android:id="@+id/minus"
-            tools:ignore="HardcodedText" />
+            android:text="@string/swap"
+            android:id="@+id/swap" />
 
         <Button
-            android:text="1"
-            android:id="@+id/one"
-            tools:ignore="HardcodedText" />
+            android:text="@string/div"
+            android:id="@+id/div" />
 
         <Button
-            android:text="2"
-            android:id="@+id/two"
-            tools:ignore="HardcodedText" />
+            android:text="@string/mult"
+            android:id="@+id/mult" />
 
         <Button
-            android:text="3"
-            android:id="@+id/three"
-            tools:ignore="HardcodedText" />
+            android:text="@string/minus"
+            android:id="@+id/minus" />
+
+        <Button
+            android:text="@string/one"
+            android:id="@+id/one" />
+
+        <Button
+            android:text="@string/two"
+            android:id="@+id/two" />
+
+        <Button
+            android:text="@string/three"
+            android:id="@+id/three" />
 
         <Button
             android:layout_gravity="fill"
             android:layout_rowSpan="2"
-            android:text="\u002B"
-            android:id="@+id/plus"
-            tools:ignore="HardcodedText" />
+            android:text="@string/plus"
+            android:id="@+id/plus" />
 
         <Button
-            android:text="4"
-            android:id="@+id/four"
-            tools:ignore="HardcodedText" />
+            android:text="@string/four"
+            android:id="@+id/four" />
 
         <Button
-            android:text="5"
-            android:id="@+id/five"
-            tools:ignore="HardcodedText" />
+            android:text="@string/five"
+            android:id="@+id/five" />
 
         <Button
-            android:text="6"
-            android:id="@+id/six"
-            tools:ignore="HardcodedText" />
+            android:text="@string/six"
+            android:id="@+id/six" />
 
         <Button
-            android:text="7"
-            android:id="@+id/seven"
-            tools:ignore="HardcodedText" />
+            android:text="@string/seven"
+            android:id="@+id/seven" />
 
         <Button
-            android:text="8"
-            android:id="@+id/eight"
-            tools:ignore="HardcodedText" />
+            android:text="@string/eight"
+            android:id="@+id/eight" />
 
         <Button
-            android:text="9"
-            android:id="@+id/nine"
-            tools:ignore="HardcodedText" />
+            android:text="@string/nine"
+            android:id="@+id/nine" />
 
         <Button
             android:layout_rowSpan="2"
             android:layout_gravity="fill"
-            android:text="\u003D"
-            android:id="@+id/equal"
-            tools:ignore="HardcodedText" />
+            android:text="@string/equal"
+            android:id="@+id/equal" />
 
         <Button
             android:layout_columnSpan="2"
             android:layout_gravity="fill"
-            android:text="0"
-            android:id="@+id/zero"
-            tools:ignore="HardcodedText" />
+            android:text="@string/zero"
+            android:id="@+id/zero" />
 
         <Button
-            android:text="\u002E"
-            android:id="@+id/decim"
-            tools:ignore="HardcodedText" />
+            android:text="@string/decim"
+            android:id="@+id/decim" />
     </GridLayout>
 </RelativeLayout>
